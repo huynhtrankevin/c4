@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Connect 4</title>
+    <style>
+    	* { padding: 0; margin: 0; }
+    	canvas { background: #eee; display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+<canvas id="myCanvas" width="1000" height="1000"></canvas>
+<script src="./js/c4_utils.js"></script>
+<script src="./js/c4_logic.js"></script>
+<script>
+
+
+	// JavaScript code goes here
+	var canvas = document.getElementById("myCanvas");
+	var ctx = canvas.getContext("2d");
+
+	initBoard(ctx);
+	
+
+	
+
+	document.addEventListener('click', printMousePos, true);
+	function printMousePos(e){
+    	cursorX = e.pageX;
+    	var col = px2Col(cursorX);
+    	var row = findRow(col);
+
+    	if(row != -1) {
+    		drawToken(player,col,row);
+    	}
+
+    	// switch players
+    	if (player == 1) {
+    		player = 2;
+    	} else {
+    		player = 1;
+    	}
+    }
+
+	
+</script>
+
+</body>
+</html>
