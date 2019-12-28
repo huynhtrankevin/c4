@@ -1,6 +1,6 @@
 // variable game size
 var numRows = 5;
-var numCols = 6;
+var numCols = 13;
 
 // board size
 var boardWidth_px = 700;

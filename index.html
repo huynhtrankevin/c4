@@ -32,14 +32,18 @@
     	var row = findRow(col);
 
     	if(row != -1) {
+    		updateBoard(col,row);
     		drawToken(player,col,row);
-    	}
+    		
+    		// switch players
+	    	if (player == 1) {
+	    		player = 2;
+	    	} else {
+	    		player = 1;
+	    	}
 
-    	// switch players
-    	if (player == 1) {
-    		player = 2;
     	} else {
-    		player = 1;
+	    	// do nothing
     	}
     }
 
