@@ -21,9 +21,9 @@
 	var ctx = canvas.getContext("2d");
 
 	initBoard(ctx);
-	
 
-	
+
+
 
 	document.addEventListener('click', printMousePos, true);
 	function printMousePos(e){
@@ -33,6 +33,7 @@
 
     	if(row != -1) {
     		drawToken(player,col,row);
+        updateBoard(player,col,row);
     	}
 
     	// switch players
@@ -43,7 +44,7 @@
     	}
     }
 
-	
+
 </script>
 
 </body>
