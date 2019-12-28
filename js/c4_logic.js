@@ -11,6 +11,14 @@ for(var i = 0; i < numCols; i++) {
 // keeps track of current player
 var player = 1;
 
+
+var arr = {
+  0: new Uint32Array(2).fill(0),
+  1: new Uint32Array(2).fill(0),
+  2: new Uint32Array(2).fill(0),
+  3: new Uint32Array(2).fill(0)
+};
+
 var board = {
   1: new Uint32Array(2).fill(0),
   2: new Uint32Array(2).fill(0)
@@ -36,10 +44,69 @@ function updateBoard(player, col, row) {
   // assign
   mboard[bsidx] = bs;
   board[player] = mboard;
-
+  printBoard();
+/*
   // debug print
   console.log(player);
   console.log(mboard[0]);
   console.log(mboard[0].toString(2));
   console.log(mboard[1].toString(2));
+*/
+}
+
+// returns 1 if player won
+function checkWon(player) {
+  var isWon = 0;
+  var mboard = board[player];
+
+  var bs0 = mboard[0];
+  var bs1 = mboard[1];
+
+  // this array stores bit shifted versions of the board
+  // used in the computation of a winner in checkWon
+
+  // check horizontal (shifts of 7)
+  arr[0][0] = bs0;
+  arr[0][1] = bs1;
+
+  // check horizontal
+  // shift bs0 dowwn by 7 bits
+  // place bottom 7 bits of bs1 into top 7 bits of bs0
+
+  let shift = 7;
+  for(var i = 1; i <= 3; i++) {
+    arr[i][0] = (arr[i-1][0] >> shift) | ((arr[i-1][1] & 0x7F) << (32-shift));
+    arr[i][1] = arr[i-1][1] >> shift;
+  }
+
+  isWon |= (arr[0][0] & arr[1][0] & arr[2][0] & arr[3][0]) | (arr[0][1] & arr[1][1] & arr[2][1] & arr[3][1]);
+  // check vertical
+  // shift by 1
+  shift = 1;
+  for(var i = 1; i <= 3; i++) {
+      arr[i][0] = (arr[i-1][0] >> shift) | ((arr[i-1][1] & 0x01) << (32-shift));
+      arr[i][1] = arr[i-1][1] >> shift;
+  }
+
+  isWon |= (arr[0][0] & arr[1][0] & arr[2][0] & arr[3][0]) | (arr[0][1] & arr[1][1] & arr[2][1] & arr[3][1]);
+
+  if(isWon > 0) {
+    console.log('isWon');
+  }
+
+}
+
+function printBoard() {
+  console.log(board[player][0].toString(2));
+  console.log(board[player][0].toString(2).length);
+  console.log(board[player][1].toString(2));
+}
+
+function printArr() {
+  for(var i = 0; i < 4; i++) {
+    console.log(i);
+    for(var j = 0; j < 2; j++) {
+      console.log(arr[i][j].toString(2));
+    }
+  }
 }
