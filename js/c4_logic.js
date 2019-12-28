@@ -44,14 +44,6 @@ function updateBoard(player, col, row) {
   // assign
   mboard[bsidx] = bs;
   board[player] = mboard;
-  printBoard();
-/*
-  // debug print
-  console.log(player);
-  console.log(mboard[0]);
-  console.log(mboard[0].toString(2));
-  console.log(mboard[1].toString(2));
-*/
 }
 
 // returns 1 if player won
@@ -115,12 +107,12 @@ function checkWon(player) {
     isWon = 1;
   }
 
-  if(isWon == 1) {
-    console.log('isWon');
-  }
   return isWon;
 }
 
+function restartGame() {
+  
+}
 function printBoard() {
   console.log(board[player][0].toString(2));
   console.log(board[player][0].toString(2).length);

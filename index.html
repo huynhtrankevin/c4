@@ -34,8 +34,12 @@
     	if(row != -1) {
     		drawToken(player,col,row);
         updateBoard(player,col,row);
-        checkWon(player);
-    	}
+        let isWon = checkWon(player);
+
+        if(isWon == 1) {
+            
+        }
+      }
 
     	// switch players
     	if (player == 1) {
