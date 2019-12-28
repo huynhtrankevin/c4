@@ -56,7 +56,7 @@ function updateBoard(player, col, row) {
 
 // returns 1 if player won
 function checkWon(player) {
-  var isWon = 0;
+  var isWon = new Uint32Array(1).fill(0);
   var mboard = board[player];
 
   var bs0 = mboard[0];
@@ -73,13 +73,14 @@ function checkWon(player) {
   // shift bs0 dowwn by 7 bits
   // place bottom 7 bits of bs1 into top 7 bits of bs0
 
-  let shift = 7;
+  var shift = 7;
   for(var i = 1; i <= 3; i++) {
     arr[i][0] = (arr[i-1][0] >> shift) | ((arr[i-1][1] & 0x7F) << (32-shift));
     arr[i][1] = arr[i-1][1] >> shift;
   }
 
   isWon |= (arr[0][0] & arr[1][0] & arr[2][0] & arr[3][0]) | (arr[0][1] & arr[1][1] & arr[2][1] & arr[3][1]);
+
   // check vertical
   // shift by 1
   shift = 1;
@@ -90,10 +91,34 @@ function checkWon(player) {
 
   isWon |= (arr[0][0] & arr[1][0] & arr[2][0] & arr[3][0]) | (arr[0][1] & arr[1][1] & arr[2][1] & arr[3][1]);
 
-  if(isWon > 0) {
-    console.log('isWon');
+  // check diag /
+  // shift by 8
+  shift = 8;
+  for(var i = 1; i <= 3; i++) {
+      arr[i][0] = (arr[i-1][0] >> shift) | ((arr[i-1][1] & 0xFF) << (32-shift));
+      arr[i][1] = arr[i-1][1] >> shift;
   }
 
+  isWon |= (arr[0][0] & arr[1][0] & arr[2][0] & arr[3][0]) | (arr[0][1] & arr[1][1] & arr[2][1] & arr[3][1]);
+
+  // check diag \
+  // shift by 6
+  shift = 6;
+  for(var i = 1; i <= 3; i++) {
+      arr[i][0] = (arr[i-1][0] >> shift) | ((arr[i-1][1] & 0xFF) << (32-shift));
+      arr[i][1] = arr[i-1][1] >> shift;
+  }
+
+  isWon |= (arr[0][0] & arr[1][0] & arr[2][0] & arr[3][0]) | (arr[0][1] & arr[1][1] & arr[2][1] & arr[3][1]);
+
+  if(isWon != 0) {
+    isWon = 1;
+  }
+
+  if(isWon == 1) {
+    console.log('isWon');
+  }
+  return isWon;
 }
 
 function printBoard() {
