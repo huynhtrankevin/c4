@@ -21,9 +21,9 @@
 	var ctx = canvas.getContext("2d");
 
 	initBoard(ctx);
-	
 
-	
+
+
 
 	document.addEventListener('click', printMousePos, true);
 	function printMousePos(e){
@@ -32,22 +32,25 @@
     	var row = findRow(col);
 
     	if(row != -1) {
-    		updateBoard(col,row);
     		drawToken(player,col,row);
-    		
-    		// switch players
-	    	if (player == 1) {
-	    		player = 2;
-	    	} else {
-	    		player = 1;
-	    	}
+        updateBoard(player,col,row);
+        let isWon = checkWon(player);
 
+        if(isWon == 1) {
+            //restartGame(ctx);
+            console.log('isWon');
+        }
+      }
+
+    	// switch players
+    	if (player == 1) {
+    		player = 2;
     	} else {
-	    	// do nothing
+    		player = 1;
     	}
     }
 
-	
+
 </script>
 
 </body>

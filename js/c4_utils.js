@@ -1,6 +1,7 @@
 // variable game size
-var numRows = 5;
-var numCols = 13;
+
+var numRows = 6;
+var numCols = 7;
 
 // board size
 var boardWidth_px = 700;
@@ -11,12 +12,13 @@ var boardx = 1000/2-boardWidth_px/2;
 var boardy = 120;
 
 /*
-	dx - horizontal space in pixels between tokens 
+	dx - horizontal space in pixels between tokens
 	boardWidth_px = numCols*tokenD + (numCols+1)*dx
 	dx/tokenD = 0.20
 	2 equations - 2 unknowns
 */
 
+// fix this to be 2 different equations
 var tokenD = boardWidth_px/(numCols +(numCols+1)*0.20);
 var tokenR = tokenD/2;
 var dx = 0.20*tokenD;
@@ -44,25 +46,25 @@ function initBoard(ctx) {
 
 // converts mouse click position to board column selection
 function px2Col(px) {
-	var offset = window.innerWidth/2 - 1000/2 + boardx; 
+	var offset = window.innerWidth/2 - 1000/2 + boardx;
 	var colWidth = dx + tokenD;
 	px -= offset;
 	var col = Math.floor(px/colWidth);
-	
+
 	if(col < 0) col = 0;
 	if(col >= numCols) col = numCols-1;
 	return col;
 }
 
 function findRow(column) {
-	
+
 	var row = heights[column];
 	if(row >= numRows) {
 		row = -1;
 	} else {
 		heights[column]++;
 	}
-	
+
 	return row;
 }
 
