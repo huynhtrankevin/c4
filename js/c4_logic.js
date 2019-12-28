@@ -110,8 +110,14 @@ function checkWon(player) {
   return isWon;
 }
 
-function restartGame() {
-  
+function restartGame(ctx) {
+    board[1][0] = 0;
+    board[1][1] = 0;
+    board[2][0] = 0;
+    board[1][1] = 0;
+
+    heights = Array(numCols).fill(0);
+    initBoard(ctx);
 }
 function printBoard() {
   console.log(board[player][0].toString(2));
