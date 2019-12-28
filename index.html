@@ -33,21 +33,26 @@
 
     	if(row != -1) {
     		drawToken(player,col,row);
-        updateBoard(player,col,row);
-        let isWon = checkWon(player);
+        	updateBoard(player,col,row);
+        	let isWon = checkWon(player);
 
-        if(isWon == 1) {
-            //restartGame(ctx);
-            console.log('isWon');
-        }
-      }
+        	if(isWon == 1) {
+            	//restartGame(ctx);
+            	console.log('isWon');
+        	}
+      	
+      		// switch players
+    		if (player == 1) {
+    			player = 2;
+    		} else {
+    			player = 1;
+    		}
+      	} else {
+      		// invalid selection
+      		// maintain current player turn
+      	}
 
-    	// switch players
-    	if (player == 1) {
-    		player = 2;
-    	} else {
-    		player = 1;
-    	}
+    	
     }
 
 
