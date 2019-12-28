@@ -11,7 +11,6 @@ for(var i = 0; i < numCols; i++) {
 // keeps track of current player
 var player = 1;
 
-<<<<<<< HEAD
 // each player gets 2 x 32-bit integers representing their respective boards
 // board[player][0] - holds information about positions 0-31
 // board[player][1] - holds information about positions 32-64
@@ -26,9 +25,6 @@ function updateBoard(player,col,row) {
 
 	board[player]
 }
-
-function checkWon(player) {
-=======
 
 var arr = {
   0: new Uint32Array(2).fill(0),
@@ -142,8 +138,6 @@ function printBoard() {
   console.log(board[player][0].toString(2).length);
   console.log(board[player][1].toString(2));
 }
->>>>>>> 79c94ff044bb83ae2af3a6574676ec18aa56bfb2
-
 function printArr() {
   for(var i = 0; i < 4; i++) {
     console.log(i);
