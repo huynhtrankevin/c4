@@ -33,8 +33,10 @@
 
     	if(row != -1) {
     		drawToken(player,col,row);
-        	updateBoard(player,col,row);
-        	let isWon = checkWon(player);
+        	var values = updateBoard(board[player][0],board[player][1],col,row);
+ 			setBoard(values,player);
+
+        	let isWon = checkWon(board[player][0],board[player][1]);
 
         	if(isWon == 1) {
             	//restartGame(ctx);

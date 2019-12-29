@@ -15,16 +15,6 @@ var player = 1;
 // board[player][0] - holds information about positions 0-31
 // board[player][1] - holds information about positions 32-64
 
-var board = {
-	1: new Array(2).fill(0), // string 1
-	2: new Array(2).fill(0) // string 2
-};
-
-
-function updateBoard(player,col,row) {
-
-	board[player]
-}
 
 var arr = {
   0: new Uint32Array(2).fill(0),
@@ -33,15 +23,28 @@ var arr = {
   3: new Uint32Array(2).fill(0)
 };
 
+
 var board = {
   1: new Uint32Array(2).fill(0),
   2: new Uint32Array(2).fill(0)
 };
 
-function updateBoard(player, col, row) {
 
-// get the player board
-  let mboard = board[player];
+// returns next
+function minimax(board, depth, heights, player) {
+
+}
+
+
+// param b0 : board[player][0] - first 32-bit integer representing first 32 board positions
+// param b1 : board[player][1] - second 32-bit integer representing 33-64 board positions
+// col, row : desired token location
+/*
+	Note: this is a hacky way to get around JS' pass by reference for board object.
+	I need to be able to call updateBoard recursively without modifying the original
+	object.
+*/
+function updateBoard(b0, b1, col, row) {
 
   // get bit index of token position
   let bidx = base[col] + row;
@@ -49,28 +52,20 @@ function updateBoard(player, col, row) {
   // get the correct bitstring idx into mboard
   // divide bit index by 32 (size of elements of mboard)
   let bsidx = Math.floor(bidx/32);
-  let bs = mboard[bsidx];
+  let bs = b0;
+  if(bsidx == 1) {
+  		bs = b1;
+  }
+
+//  let bs = mboard[bsidx];
 
   // find number of times to shift into this bitstring
   let shift = bidx%32;
   bs = bs | (1 << shift);
 
-  // assign
-  mboard[bsidx] = bs;
-  board[player] = mboard;
+  return [b0, b1];
 }
 
-
-// takes in an unsigned 32-bit integer n
-// returns the number of ones in the number's binary form
-function getNumberOfOnes(n) {
-	var res = 0;
-	for(var i = 0; i < 32; i++) {
-		res += ((n >> i) & 0x01);
-	}
-
-	return res;
-}
 
 // param player: current player
 // param n: number of tokens in a row to check for
@@ -213,6 +208,9 @@ function checkWon(player) {
   return isWon;
 }
 
+
+// util functions
+//**************************************************************************************
 function restartGame(ctx) {
     board[1][0] = 0;
     board[1][1] = 0;
@@ -222,11 +220,13 @@ function restartGame(ctx) {
     heights = Array(numCols).fill(0);
     initBoard(ctx);
 }
+
 function printBoard() {
   console.log(board[player][0].toString(2));
   console.log(board[player][0].toString(2).length);
   console.log(board[player][1].toString(2));
 }
+
 function printArr() {
   for(var i = 0; i < 4; i++) {
     console.log(i);
@@ -234,4 +234,15 @@ function printArr() {
       console.log(arr[i][j].toString(2));
     }
   }
+}
+
+// takes in an unsigned 32-bit integer n
+// returns the number of ones in the number's binary form
+function getNumberOfOnes(n) {
+	var res = 0;
+	for(var i = 0; i < 32; i++) {
+		res += ((n >> i) & 0x01);
+	}
+
+	return res;
 }
