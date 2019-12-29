@@ -60,6 +60,95 @@ function updateBoard(player, col, row) {
   board[player] = mboard;
 }
 
+
+// takes in an unsigned 32-bit integer n
+// returns the number of ones in the number's binary form
+function getNumberOfOnes(n) {
+	var res = 0;
+	for(var i = 0; i < 32; i++) {
+		res += ((n >> i) & 0x01);
+	}
+
+	return res;
+}
+
+// param player: current player
+// param n: number of tokens in a row to check for
+// returns number of alignments of n tokens
+function checkAlignment(player, n) {
+	var mboard = board[player];
+	var bs0 = mboard[0];
+	var bs1 = mboard[1];
+	var isAligned = new Uint32Array(1).fill(0);
+	var alignments = 0;
+
+	
+	
+	// check horizontal (shifts of 7)
+	arr[0][0] = bs0;
+	arr[0][1] = bs1;
+
+	var tmp1 =  bs0;
+	var tmp2 =  bs1;
+
+	var shift = 7;
+	for(var i = 1; i < n; i++) {
+		arr[i][0] = (arr[i-1][0] >> shift) | ((arr[i-1][1] & 0x7F) << (32-shift));
+		arr[i][1] = arr[i-1][1] >> shift;
+		tmp1 &= arr[i][0];
+		tmp2 &= arr[i][1];
+	}
+	isAligned = tmp1 | tmp2;
+	alignments += getNumberOfOnes(isAligned);
+
+	// check vertical
+	// shift by 1
+	tmp1 =  bs0;
+	tmp2 =  bs1;
+	shift = 1;
+	for(var i = 1; i < n; i++) {
+		arr[i][0] = (arr[i-1][0] >> shift) | ((arr[i-1][1] & 0x01) << (32-shift));
+		arr[i][1] = arr[i-1][1] >> shift;
+		tmp1 &= arr[i][0];
+		tmp2 &= arr[i][1];
+	}
+
+	isAligned = tmp1 | tmp2;
+	alignments += getNumberOfOnes(isAligned);
+
+	// check diag /
+	// shift by 8
+	tmp1 =  bs0;
+	tmp2 =  bs1;
+	shift = 8;
+	for(var i = 1; i < n; i++) {
+	  arr[i][0] = (arr[i-1][0] >> shift) | ((arr[i-1][1] & 0xFF) << (32-shift));
+	  arr[i][1] = arr[i-1][1] >> shift;
+	  tmp1 &= arr[i][0];
+		tmp2 &= arr[i][1];
+	}
+
+	isAligned = tmp1 | tmp2;
+	alignments += getNumberOfOnes(isAligned);
+
+	// check diag \
+	// shift by 6
+	tmp1 =  bs0;
+	tmp2 =  bs1;
+	shift = 6;
+	for(var i = 1; i < n; i++) {
+	  arr[i][0] = (arr[i-1][0] >> shift) | ((arr[i-1][1] & 0xFF) << (32-shift));
+	  arr[i][1] = arr[i-1][1] >> shift;
+	  tmp1 &= arr[i][0];
+	  tmp2 &= arr[i][1];
+	}
+
+	isAligned = tmp1 | tmp2;
+	alignments += getNumberOfOnes(isAligned);
+
+	return alignments;
+}
+
 // returns 1 if player won
 function checkWon(player) {
   var isWon = new Uint32Array(1).fill(0);
