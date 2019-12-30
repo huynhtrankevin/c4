@@ -29,14 +29,13 @@
 	function printMousePos(e){
     	cursorX = e.pageX;
     	var col = px2Col(cursorX);
-    	var row = findRow(col);
+    	var row = findRow(board,col);
 
     	if(row != -1) {
     		drawToken(player,col,row);
-        	var values = updateBoard(board[player][0],board[player][1],col,row);
- 			setBoard(values,player);
+        	updateBoard(board,col,row);
 
-        	let isWon = checkWon(board[player][0],board[player][1]);
+        	let isWon = checkWon(board,player);
 
         	if(isWon == 1) {
             	//restartGame(ctx);

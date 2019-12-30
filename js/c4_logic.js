@@ -1,6 +1,4 @@
 
-// variable used to store row availability of column
-var heights = Array(numCols).fill(0);
 
 // variable used to store bit index of first row in each column
 var base = Array(numCols).fill(0);
@@ -15,7 +13,6 @@ var player = 1;
 // board[player][0] - holds information about positions 0-31
 // board[player][1] - holds information about positions 32-64
 
-
 var arr = {
   0: new Uint32Array(2).fill(0),
   1: new Uint32Array(2).fill(0),
@@ -26,25 +23,77 @@ var arr = {
 
 var board = {
   1: new Uint32Array(2).fill(0),
-  2: new Uint32Array(2).fill(0)
+  2: new Uint32Array(2).fill(0),
+  "heights": Array(numCols).fill(0)	// variable used to store row availability of column
 };
 
 
-// returns next
-function minimax(board, depth, heights, player) {
+function scoreState(board) {
+ 	var p1Score = 0;	// minimizer
+ 	var p2Score = 0;	// maximizer
 
+ 	// check number of alignments of 3 in a row
+ 	p1Score = -checkAlignment(board,1,3);
+ 	p2Score = checkAlignment(board,2,3);
+
+ 	var score = p1Score + p2Score;
+
+ 	return score;
+}
+
+function minimax(board, depth, player) {
+	var bboard = JSON.parse(JSON.stringify(board));
+	if(player == 1) {
+		var nextPlayer = 2;
+	} else {
+		var nextPlayer = 1;
+	}
+
+	
+
+	// if at terminal depth, score state
+	if(depth == 0) {
+		// score state
+		// return val
+		var actionScoreArr = Array(1).fill(0);
+		var score = scoreState(bboard);
+		actionScoreArr[0] = score;
+		return actionScoreArr;
+
+	} else {
+		var actionScoreArr = Array(numCols).fill(0);
+		// recurse on child nodes
+		for(var col = 0; col < numCols; col++) {
+			// create a clone so that we don't modify the original
+			let mboard = JSON.parse(JSON.stringify(bboard));
+			let row = findRow(mboard,col);
+
+			if(row != -1) {
+				// valid row, continue
+				updateBoard(mboard,row,col);
+				var Varray = minimax(mboard, depth-1, nextPlayer);
+				
+				// minimizer
+				if(nextPlayer == 1) {
+					actionScoreArr[col] = Math.min(Varray);
+				} else {
+					actionScoreArr[col] = Math.max(Varray);
+				}
+			} else {
+				if(player == 1) {
+					actionScoreArr[col] = 10000;
+				} else {
+					actionScoreArr[col] = -10000;
+				}				
+			}
+		}
+
+		return actionScoreArr;
+	}
 }
 
 
-// param b0 : board[player][0] - first 32-bit integer representing first 32 board positions
-// param b1 : board[player][1] - second 32-bit integer representing 33-64 board positions
-// col, row : desired token location
-/*
-	Note: this is a hacky way to get around JS' pass by reference for board object.
-	I need to be able to call updateBoard recursively without modifying the original
-	object.
-*/
-function updateBoard(b0, b1, col, row) {
+function updateBoard(bboard, col, row) {
 
   // get bit index of token position
   let bidx = base[col] + row;
@@ -52,25 +101,19 @@ function updateBoard(b0, b1, col, row) {
   // get the correct bitstring idx into mboard
   // divide bit index by 32 (size of elements of mboard)
   let bsidx = Math.floor(bidx/32);
-  let bs = b0;
-  if(bsidx == 1) {
-  		bs = b1;
-  }
-
-//  let bs = mboard[bsidx];
+  var bs = bboard[player][bsidx];
 
   // find number of times to shift into this bitstring
   let shift = bidx%32;
   bs = bs | (1 << shift);
-
-  return [b0, b1];
+  bboard[player][bsidx] = bs;
 }
 
 
 // param player: current player
 // param n: number of tokens in a row to check for
 // returns number of alignments of n tokens
-function checkAlignment(player, n) {
+function checkAlignment(board, player, n) {
 	var mboard = board[player];
 	var bs0 = mboard[0];
 	var bs1 = mboard[1];
@@ -145,7 +188,7 @@ function checkAlignment(player, n) {
 }
 
 // returns 1 if player won
-function checkWon(player) {
+function checkWon(board, player) {
   var isWon = new Uint32Array(1).fill(0);
   var mboard = board[player];
 
@@ -211,6 +254,18 @@ function checkWon(player) {
 
 // util functions
 //**************************************************************************************
+
+function findRow(board, column) {
+	var row = board["heights"][column];
+	if(row >= numRows) {
+		row = -1;
+	} else {
+		board["heights"][column]++;
+	}
+
+	return row;
+}
+
 function restartGame(ctx) {
     board[1][0] = 0;
     board[1][1] = 0;

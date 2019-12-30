@@ -56,17 +56,7 @@ function px2Col(px) {
 	return col;
 }
 
-function findRow(column) {
 
-	var row = heights[column];
-	if(row >= numRows) {
-		row = -1;
-	} else {
-		heights[column]++;
-	}
-
-	return row;
-}
 
 // param player - indicates color of token
 // param column - indicates the column in which to draw token
