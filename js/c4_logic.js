@@ -29,71 +29,112 @@ var board = {
 
 
 function scoreState(board) {
- 	var p1Score = 0;	// minimizer
- 	var p2Score = 0;	// maximizer
+ 	let p1Score = 0;	// minimizer
+ 	let p2Score = 0;	// maximizer
 
  	// check number of alignments of 3 in a row
- 	p1Score = -checkAlignment(board,1,3);
+ 	p1Score = -1.2*checkAlignment(board,1,3);
  	p2Score = checkAlignment(board,2,3);
 
- 	var score = p1Score + p2Score;
+ 	let score = p1Score + p2Score;
 
+ 	p1Score = -0.25*checkAlignment(board,1,2);
+ 	p2Score = 0.25*checkAlignment(board,2,2);
+
+ 	score = score + p1Score + p2Score;
  	return score;
 }
 
+
 function minimax(board, depth, player) {
-	var bboard = JSON.parse(JSON.stringify(board));
-	if(player == 1) {
-		var nextPlayer = 2;
-	} else {
-		var nextPlayer = 1;
-	}
-
 	
+	var nextPlayer = 2;
+	if(player != 1) {nextPlayer = 1;}
 
-	// if at terminal depth, score state
 	if(depth == 0) {
-		// score state
-		// return val
-		var actionScoreArr = Array(1).fill(0);
-		var score = scoreState(bboard);
-		actionScoreArr[0] = score;
-		return actionScoreArr;
+		let score = scoreState(board);
+		let move = 0;
+		return [score, move];
 
 	} else {
-		var actionScoreArr = Array(numCols).fill(0);
-		// recurse on child nodes
-		for(var col = 0; col < numCols; col++) {
-			// create a clone so that we don't modify the original
-			let mboard = JSON.parse(JSON.stringify(bboard));
-			let row = findRow(mboard,col);
+		var bestScore = 0;
+		var move = -1;
 
-			if(row != -1) {
-				// valid row, continue
-				updateBoard(mboard,row,col);
-				var Varray = minimax(mboard, depth-1, nextPlayer);
-				
-				// minimizer
-				if(nextPlayer == 1) {
-					actionScoreArr[col] = Math.min(Varray);
-				} else {
-					actionScoreArr[col] = Math.max(Varray);
-				}
-			} else {
+		// minimzer
+		if(player == 1) {bestScore = 10000;}
+		else {bestScore = -10000;}
+
+
+		// check for win in this current config
+		for(var col = 0; col < numCols; col++) {
+			let bboard = JSON.parse(JSON.stringify(board));
+			let row = findRow(bboard,col);
+			updateBoard(bboard,player,col, row);
+			let isWon = checkWon(bboard,player);
+
+			if(isWon == 1) {
+	
 				if(player == 1) {
-					actionScoreArr[col] = 10000;
+					bestScore = -10000;
+					move = col;
+					return [bestScore, move];
 				} else {
-					actionScoreArr[col] = -10000;
-				}				
+					bestScore = 10000;
+					move = col;
+					return [bestScore, move];
+				}
 			}
 		}
 
-		return actionScoreArr;
-	}
+		// check to block
+		for(var col = 0; col < numCols; col++) {
+			let bboard = JSON.parse(JSON.stringify(board));
+			let row = findRow(bboard,col);
+			updateBoard(bboard,nextPlayer, col, row);
+			let isWon = checkWon(bboard,nextPlayer);
+
+			if(isWon == 1) {
+				if(player == 1) {
+					bestScore = -10000;
+					move = col;
+					return [bestScore, move];
+				} else {
+					bestScore = 10000;
+					move = col;
+					return [bestScore, move];
+				}
+			}
+		}
+
+
+		// iterate through each child node
+		for(var col = 0; col < numCols; col++) {
+			let bboard = JSON.parse(JSON.stringify(board));
+			let row = findRow(bboard,col);
+			updateBoard(bboard,player, col, row);
+
+			var res = minimax(bboard, depth-1, nextPlayer);
+			var score = res[0];
+
+			if(player == 1) {
+				if(score < bestScore) {
+					bestScore = score;
+					move = col;
+				}
+			} else {
+				if(score > bestScore) {
+					bestScore = score;
+					move = col;
+				}
+			}
+		}
+
+		return [bestScore,move];
+	}	
 }
 
 
-function updateBoard(bboard, col, row) {
+function updateBoard(bboard, player, col, row) {
 
   // get bit index of token position
   let bidx = base[col] + row;
@@ -137,7 +178,8 @@ function checkAlignment(board, player, n) {
 		tmp2 &= arr[i][1];
 	}
 	isAligned = tmp1 | tmp2;
-	alignments += getNumberOfOnes(isAligned);
+//	alignments += getNumberOfOnes(isAligned);
+	if(getNumberOfOnes(isAligned) > 0) alignments++;
 
 	// check vertical
 	// shift by 1
@@ -152,7 +194,8 @@ function checkAlignment(board, player, n) {
 	}
 
 	isAligned = tmp1 | tmp2;
-	alignments += getNumberOfOnes(isAligned);
+	//alignments += getNumberOfOnes(isAligned);
+	if(getNumberOfOnes(isAligned) > 0) alignments++;
 
 	// check diag /
 	// shift by 8
@@ -167,7 +210,8 @@ function checkAlignment(board, player, n) {
 	}
 
 	isAligned = tmp1 | tmp2;
-	alignments += getNumberOfOnes(isAligned);
+	//alignments += getNumberOfOnes(isAligned);
+	if(getNumberOfOnes(isAligned) > 0) alignments++;
 
 	// check diag \
 	// shift by 6
@@ -182,7 +226,8 @@ function checkAlignment(board, player, n) {
 	}
 
 	isAligned = tmp1 | tmp2;
-	alignments += getNumberOfOnes(isAligned);
+	//alignments += getNumberOfOnes(isAligned);
+	if(getNumberOfOnes(isAligned) > 0) alignments++;
 
 	return alignments;
 }
