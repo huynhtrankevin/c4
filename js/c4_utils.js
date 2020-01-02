@@ -1,10 +1,11 @@
 // variable game size
-
 var numRows = 6;
 var numCols = 7;
+var connect = 4;
+var maxDepth = 7;
 
 // board size
-var boardWidth_px = 700;
+var boardWidth_px = 500;
 var boardHeight_px = 500;
 
 // top-left pixel location of board
@@ -55,8 +56,6 @@ function px2Col(px) {
 	if(col >= numCols) col = numCols-1;
 	return col;
 }
-
-
 
 // param player - indicates color of token
 // param column - indicates the column in which to draw token

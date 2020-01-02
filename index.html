@@ -33,9 +33,9 @@
 
     	if(row != -1) {
     		drawToken(player,col,row);
-        	updateBoard(board,player,col,row);
+        	updateBoard1(board,player,col,row);
 
-        	let isWon = checkWon(board,player);
+        	let isWon = checkAlignment1(board,player,connect);
 
         	if(isWon == 1) {
             	//restartGame(ctx);
@@ -50,22 +50,26 @@
     		}
 
     		// AI turn
+    		
     		console.log('applying minimax');
-    		let res = minimax(board,7,player);
+    		let res = minimax(board,0,player);
     		col = res[1];
     		let score = res[0];
-    		console.log(score);
+    		console.log(res);
 
     		row = findRow(board,col);
-    		drawToken(player,col,row);
-    		updateBoard(board,player,col,row);
-
-    		// switch players
-    		if (player == 1) {
-    			player = 2;
-    		} else {
-    			player = 1;
-    		}
+    		if(row != -1) {
+	    		drawToken(player,col,row);
+	    		updateBoard1(board,player,col,row);
+				
+	    		// switch players
+	    		if (player == 1) {
+	    			player = 2;
+	    		} else {
+	    			player = 1;
+	    		}
+			}
+    		
 
       	} else {
       		// invalid selection
