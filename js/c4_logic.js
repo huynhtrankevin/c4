@@ -32,13 +32,13 @@ function scoreState(board) {
  	// check number of alignments of 3 in a row
  	p1Score = -checkAlignment1(board,1,connect-1);
  	p2Score = checkAlignment1(board,2,connect-1);
-
- 	p1Score = -0.25*checkAlignment1(board,1,2);
- 	p2Score = 0.25*checkAlignment1(board,2,2);
  	
  	let score = p1Score + p2Score;
+ 	
+ 	p1Score = -0.25*checkAlignment1(board,1,2);
+ 	p2Score = 0.25*checkAlignment1(board,2,2);
 
- 	//score = score + p1Score + p2Score;
+ 	score = score + p1Score + p2Score;
  	return score;
 }
 
