@@ -5,9 +5,9 @@ A connect 4 game replica with a minimax search-based AI implemented in javascrip
 1. Clone the repository
 ```
  cd /path/to/desired/directory
- git clone https://github.com/huynhtrankevin/c4.git
+ git clone https://github.com/huynhtrankevin/c4.git 
 ```
-Or download the repository
+
 2. Open `index.html` in your browser
 
 
@@ -117,6 +117,17 @@ One problem we've run into is how do we handle where the other player's tokens a
 ```
 (bs_1 >> 0) & (bs_1 >> 6) & (bs_1 >> 12) & (bs_1 >> 18)
 ```
-If the result of the operation above is greater than 0, then we have at least one horizontal alignment! Apply the same idea to the remaining directions. 
+If the result of the operation above is greater than 0, then we have at least one horizontal alignment! Apply the same idea to the remaining directions. You'll find that there will be issues with the vertical direction. To overcome this, we just add an additional "imaginary" or "buffer" row to our board:
+
+```
+06 13 20 27 34 41 48
+____________________
+05 12 19 26 33 40 47
+04 11 18 25 32 39 46
+03 10 17 24 31 38 45
+02 09 16 23 30 37 44
+01 08 15 22 29 36 43
+00 07 14 21 28 35 42 
+```
 
 ## Minimax Algorithm
