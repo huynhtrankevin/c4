@@ -1,6 +1,15 @@
 # Connect 4
 A connect 4 game replica with a minimax search-based AI implemented in javascript. 
 
+# How to use it
+1. Clone the repository
+```
+ cd /path/to/desired/directory
+ git clone https://github.come/huynhtrankevin/c4.git
+```
+2. Open `index.html` in your browser
+
+
 # How It Works
 
 ## Bitboard Data Structure
