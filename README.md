@@ -130,4 +130,12 @@ ____________________
 00 07 14 21 28 35 42 
 ```
 
+### Game State Updates
+
+To update our bitstring with a new token placement, we simply need to left shift a 1 to the correct bit index. For example, after we've determined that we want to a place a token in the 3rd column in row 3, we could work out that the corresponding bit index into our bitstring is 16. So we would do:
+```
+bs_1 | (1 << 16)
+```
+to set the 16th bit of our bitstring to 1. Easy!
+
 ## Minimax Algorithm
