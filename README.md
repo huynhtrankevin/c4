@@ -40,7 +40,7 @@ are three ways in which we could achieve a horizontal alignment of four tokens. 
 Let's remind ourselves briefly of several bitwise operations.
 #### Bit Shift Operator 
 
-##### Left Shift Operator (<<)
+##### Left Shift Operator (A << B)
 ```
 (1 << 0) = (0b0001)
 (1 << 1) = (0b0010)
@@ -49,7 +49,7 @@ Let's remind ourselves briefly of several bitwise operations.
 ```
 This is effectively multiplying the integer by 2! That is, `1 << 2` is `1*2*2 = 4 = 0b0100`.
 
-##### Right Shift Operator (>>)
+##### Right Shift Operator (A >> B)
 ```
 (8 >> 0) = (0b1000 >> 0) = (0b1000)
 (8 >> 1) = (0b1000 >> 1) = (0b0100)
@@ -58,7 +58,7 @@ This is effectively multiplying the integer by 2! That is, `1 << 2` is `1*2*2 = 
 ```
 This is simply dividing an integer by 2. That is, `8 >> 2` is equivalent to dividing the number 8 by 2, 2 times! This results in `(8 >> 2) = (0b1000 >> 2) = (0b0010) = 2`.  
 
-#### Bit AND Operator
+#### Bitwise AND Operator (A & B)
 
 ```
 (6 & 1) = (0b0110 & 0b0001) = (0b0000) = 0
@@ -67,7 +67,21 @@ This is simply dividing an integer by 2. That is, `8 >> 2` is equivalent to divi
 (6 & 4) = (0b0110 & 0b0100) = (0b0100) = 4
 ```
 
-The bitwise AND operator allows you to select the bits of interest within your bitstring. For example, if we were interested in the values of the bottom 3 bits of our bitstring `0b0010`, then we would peform `0b0010 & 0b0111`. 
+The bitwise AND operator allows you to select the bits of interest within your bitstring. For example, if we were interested in the values of the bottom 3 bits of our bitstring `0b0010` were equal to 1 or if there were any bits equal to 1 at all, then we would peform `0b0010 & 0b0111`. 
 
+#### Bitwise OR Operator (A | B)
+```
+(6 | 1) = (0b0110 | 0b0001) = (0b0111) = 7
+(6 | 2) = (0b0110 | 0b0010) = (0b1000) = 8
+(6 | 3) = (0b0110 | 0b0011) = (0b1001) = 9
+(6 | 4) = (0b0110 | 0b0100) = (0b1010) = 10
+```
+The bitwise OR operator can allow you to set bits. For example:
+```
+(0b0000 0010 | 0b1111 0000) = (0b1111 0010) 
+```
+We set the upper four bits of our bitstring to `11111`!
+
+There are more operations, but those four are all we need to put the bitboard data structure to use.
 
 ## Minimax Algorithm
