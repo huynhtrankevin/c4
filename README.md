@@ -5,8 +5,9 @@ A connect 4 game replica with a minimax search-based AI implemented in javascrip
 1. Clone the repository
 ```
  cd /path/to/desired/directory
- git clone https://github.come/huynhtrankevin/c4.git
+ git clone https://github.com/huynhtrankevin/c4.git
 ```
+Or download the repository
 2. Open `index.html` in your browser
 
 
