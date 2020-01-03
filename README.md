@@ -77,7 +77,7 @@ This is simply dividing an integer by 2. That is, `8 >> 2` is equivalent to divi
 (6 & 4) = (0b0110 & 0b0100) = (0b0100) = 4
 ```
 
-The bitwise AND operator allows you to select the bits of interest within your bitstring. For example, if we were interested in the values of the bottom 3 bits of our bitstring `0b0010` were equal to 1 or if there were any bits equal to 1 at all, then we would peform `0b0010 & 0b0111`. 
+The bitwise AND operator allows you to select the bits of interest within your bitstring. For example, if we were interested in which of the bottom 3 bits of our bitstring `0b0010` were equal to 1 or if there were any bits equal to 1 at all, then we would peform `0b0010 & 0b0111`. 
 
 #### Bitwise OR Operator (A | B)
 ```
