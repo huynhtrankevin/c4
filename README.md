@@ -82,6 +82,31 @@ The bitwise OR operator can allow you to set bits. For example:
 ```
 We set the upper four bits of our bitstring to `11111`!
 
-There are more operations, but those four are all we need to put the bitboard data structure to use.
+There are more operations, but those four are all we need to put the bitboard data structure to use. Back to token alignments, remember that our game board is simply one long bit string with 36 places for either a 1 or a 0:
+```
+05 11 17 23 29 35 41
+04 10 16 22 28 34 40
+03 09 15 21 27 33 39
+02 08 14 20 26 32 38
+01 07 13 19 25 31 37
+00 06 12 18 24 30 36 
+```
+
+We'll assume that a 1 in a given bit index that we have a token there and a 0 means that we don't have a token there. So,
+```
+0b00000000 00000000 00000000 00000000 0000000 00000001 (There are 40 bit indices here) 
+```
+means we have a token in the bottom left corner and
+```
+0b00000000 00000000 00000000 00000000 0000000 00000010 (There are 40 bit indices here) 
+```
+means that we have a token one above the bottom left corner.
+
+One problem we've run into is how do we handle where the other player's tokens are? Simple-- we will have two bit strings! One will encode where one player's tokens are located and the other bit string will acount for the other player's tokens. So if we want to see if player 1 have a horizontal alignment of four tokens, we take player 1's bit string, call it `bs_1` and apply a combination of bitshifts and bitwise AND operations!
+
+```
+(bs_1 >> 0) & (bs_1 >> 6) & (bs_1 >> 12) & (bs_1 >> 18)
+```
+If the result of the operation above is greater than 0, then we have at least one horizontal alignment! Apply the same idea to the remaining directions. 
 
 ## Minimax Algorithm
